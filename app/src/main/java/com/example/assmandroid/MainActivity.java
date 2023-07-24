@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -52,8 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         idRcv.addItemDecoration(itemDecoration);
-        btnShowDialogAddProduct.setOnClickListener(this);
         ShowProduct();
+
+        btnShowDialogAddProduct.setOnClickListener(this);
+
+//        productAdapter = new ProductAdapter(new ArrayList<>(), this);
+//        idRcv.setAdapter(productAdapter);
+
 
     }
 
@@ -64,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful()) {
                     List<ProductModel> productList = response.body();
-                    showList(productList);
+                   showList(productList);
                 } else {
                     Log.e("API Error", "Failed to fetch products");
                 }
@@ -78,30 +84,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showList(List<ProductModel> list) {
-        productAdapter = new ProductAdapter(list, this);
-        idRcv.setAdapter(productAdapter);
+        if (list != null){
+            productAdapter = new ProductAdapter(list, this);
+            idRcv.setAdapter(productAdapter);
+//            productAdapter.setProductList(productList);
+//            productAdapter.notifyDataSetChanged();
+        }
     }
+
 
     private void AddProduct(String name, int price, String description) {
         ProductModel model = new ProductModel();
         model.setName(name);
         model.setPrice(price);
         model.setDescription(description);
-        Call<ProductModel> call = ApiService.apiService.addProduct(model);
-        call.enqueue(new Callback<ProductModel>() {
+        Call<List<ProductModel>> call = ApiService.apiService.addProduct(model);
+        call.enqueue(new Callback<List<ProductModel>>() {
             @Override
-            public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful()) {
-                    ProductModel model1 = response.body();
+                    Toast.makeText(MainActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
                     ShowProduct();
                 } else {
+                    Toast.makeText(MainActivity.this, "thêm that bai", Toast.LENGTH_SHORT).show();
                     Log.e("API Error", "Failed to fetch products");
                 }
             }
 
             @Override
-            public void onFailure(Call<ProductModel> call, Throwable t) {
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
                 Log.e("API Error", t.getMessage());
+                Toast.makeText(MainActivity.this, "lỗi ", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -111,12 +124,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         model.setName(name);
         model.setPrice(price);
         model.setDescription(description);
-        Call<ProductModel> call = ApiService.apiService.updateProduct(model, id);
-        call.enqueue(new Callback<ProductModel>() {
+        Call<List<ProductModel>> call = ApiService.apiService.updateProduct(id, model);
+        call.enqueue(new Callback<List<ProductModel>>() {
             @Override
-            public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful()) {
-                    ProductModel model1 = response.body();
                     Toast.makeText(MainActivity.this, "sua thanh cong", Toast.LENGTH_SHORT).show();
                     ShowProduct();
                 } else {
@@ -126,18 +138,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(Call<ProductModel> call, Throwable t) {
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
                 Log.e("API Error", t.getMessage());
             }
         });
-
     }
 
     private void DeleteProduct(String id) {
-        Call<Void> call = ApiService.apiService.deleteProduct(id);
-        call.enqueue(new Callback<Void>() {
+        Call<List<ProductModel>> call = ApiService.apiService.deleteProduct(id);
+        call.enqueue(new Callback<List<ProductModel>>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "xoa thanh cong", Toast.LENGTH_SHORT).show();
                     ShowProduct();
@@ -148,11 +159,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
                 Log.e("API Error", t.getMessage());
             }
-        });
 
+        });
+//        call.enqueue(new Callback<List<ProductModel>>() {
+//            @Override
+//            public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
+//                if (response.isSuccessful()) {
+//                    Toast.makeText(MainActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+//                    List<ProductModel> tableItems = response.body();
+//                    if (tableItems != null) {
+//                        productAdapter.notifyDataSetChanged();
+//                    }
+//                    //callApiGetTableList();
+//                } else {
+//                    Log.d("MAIN", "Respone Fail" + response.message());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<ProductModel>> call, Throwable t) {
+//                Log.d("MAIN", "Respone Fail" + t.getMessage());
+//            }
+//        });
     }
 
     @Override

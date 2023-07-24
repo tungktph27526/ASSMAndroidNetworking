@@ -16,16 +16,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private List<ProductModel> productList;
     private Callback callback ;
 
+
     public ProductAdapter(List<ProductModel> productList, Callback callback) {
         this.callback = callback;
         this.productList = productList;
         notifyDataSetChanged();
     }
 
-//    public void setProductList(List<ProductModel> productList) {
-//        this.productList = productList;
-//        notifyDataSetChanged();
-//    }
+    public void setProductList(List<ProductModel> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -78,6 +79,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
     public interface Callback{
         void Edit(ProductModel productModel);
+
+
         void Delete(ProductModel productModel);
     }
 
