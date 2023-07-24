@@ -35,7 +35,7 @@ app.post('/addProduct', async (req, res) => {
       const { name, price, description} = req.body;
       const product = new ProductModel({ name, price, description });
       await product.save();
-      res.json(product);
+      showList(res);
     } catch (err) {
       console.error('Error adding product:', err);
       res.status(500).json({ error: 'Internal server error' });
@@ -52,7 +52,7 @@ app.post('/addProduct', async (req, res) => {
         { name, price, description },
         { new: true }
       );
-      res.json(product);
+      showList(res);
     } catch (err) {
       console.error('Error updating product:', err);
       res.status(500).json({ error: 'Internal server error' });
@@ -64,15 +64,21 @@ app.post('/addProduct', async (req, res) => {
     try {
       const { id } = req.params;
       await ProductModel.findByIdAndRemove(id);
-      res.json({ success: true });
+      // res.json({ success: true });
+      showList(res);
     } catch (err) {
       console.error('Error deleting product:', err);
       res.status(500).json({ error: 'Internal server error' });
     }
   });
+  async function showList(res){
+    const productList = await ProductModel.find().lean();
+    res.json(productList);
+  }
   
   // Khởi động server
   const port = 8080;
   app.listen(port, () => {
     console.log(`Server started on port ${port}`);
   });
+  
