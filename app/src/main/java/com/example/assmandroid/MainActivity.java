@@ -209,11 +209,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int price = Integer.parseInt(edGia.getText().toString().trim());
             String description = edMota.getText().toString().trim();
             String image = edAnh.getText().toString().trim();
-            if (name.isEmpty() || String.valueOf(price).isEmpty() || description.isEmpty() || image.isEmpty()){
-                Toast.makeText(this, "ko dc de trong", Toast.LENGTH_SHORT).show();
-            }else {
+//            if (name.isEmpty() || String.valueOf(price).isEmpty() || description.isEmpty() || image.isEmpty()){
+//                Toast.makeText(this, "ko dc de trong", Toast.LENGTH_SHORT).show();
+//            }else {
                 AddProduct(name, price, description, image);
-            }
+            //}
             dialog.dismiss();
         });
         btnHuy.setOnClickListener(v ->{
