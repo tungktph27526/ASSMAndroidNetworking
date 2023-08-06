@@ -11,16 +11,19 @@ public class ProductModel {
     private int price;
     @SerializedName("description")
     private String description;
+    @SerializedName("image")
+    private String image;
 
 
     public ProductModel() {
     }
 
-    public ProductModel(String id, String name, int price, String description) {
+    public ProductModel(String id, String name, int price, String description, String image){
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.image = image;
     }
 
     public String getId() {
@@ -52,5 +55,13 @@ public class ProductModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

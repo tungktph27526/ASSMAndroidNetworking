@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edTen;
     private EditText edGia;
     private EditText edMota;
+    private EditText edAnh;
     private Button btnThem;
     private Button btnHuy;
     private Button btnSua;
@@ -93,11 +94,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void AddProduct(String name, int price, String description) {
+    private void AddProduct(String name, int price, String description, String image) {
         ProductModel model = new ProductModel();
         model.setName(name);
         model.setPrice(price);
         model.setDescription(description);
+        model.setImage(image);
         Call<List<ProductModel>> call = ApiService.apiService.addProduct(model);
         call.enqueue(new Callback<List<ProductModel>>() {
             @Override
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void UpdateProduct(String id, String name, int price, String description) {
+    private void UpdateProduct(String id, String name, int price, String description, String image) {
         ProductModel model = new ProductModel();
         model.setName(name);
         model.setPrice(price);
@@ -199,13 +201,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edTen = (EditText) dialog.findViewById(R.id.ed_ten);
         edGia = (EditText) dialog.findViewById(R.id.ed_gia);
         edMota = (EditText) dialog.findViewById(R.id.ed_mota);
+        edAnh = (EditText) dialog.findViewById(R.id.ed_anh);
         btnThem = (Button) dialog.findViewById(R.id.btn_them);
         btnHuy = (Button) dialog.findViewById(R.id.btn_huy);
         btnThem.setOnClickListener(v ->{
             String name = edTen.getText().toString().trim();
             int price = Integer.parseInt(edGia.getText().toString().trim());
             String description = edMota.getText().toString().trim();
-            AddProduct(name, price, description);
+            String image = edAnh.getText().toString().trim();
+            if (name.isEmpty() || String.valueOf(price).isEmpty() || description.isEmpty() || image.isEmpty()){
+                Toast.makeText(this, "ko dc de trong", Toast.LENGTH_SHORT).show();
+            }else {
+                AddProduct(name, price, description, image);
+            }
             dialog.dismiss();
         });
         btnHuy.setOnClickListener(v ->{
@@ -227,16 +235,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edTen = (EditText) dialog.findViewById(R.id.ed_ten);
         edGia = (EditText) dialog.findViewById(R.id.ed_gia);
         edMota = (EditText) dialog.findViewById(R.id.ed_mota);
+        edAnh = (EditText) dialog.findViewById(R.id.ed_anh);
         btnSua = (Button) dialog.findViewById(R.id.btn_sua);
         btnHuy = (Button) dialog.findViewById(R.id.btn_huy);
         edTen.setText(productModel.getName());
         edGia.setText(String.valueOf(productModel.getPrice()));
         edMota.setText(productModel.getDescription());
+        edAnh.setText(productModel.getImage());
         btnSua.setOnClickListener(v ->{
             String name = edTen.getText().toString().trim();
             int price = Integer.parseInt(edGia.getText().toString().trim());
             String description = edMota.getText().toString().trim();
-            UpdateProduct(productModel.getId(), name, price, description);
+            String image = edMota.getText().toString().trim();
+            UpdateProduct(productModel.getId(), name, price, description, image);
             dialog.dismiss();
         });
         btnHuy.setOnClickListener(v ->{

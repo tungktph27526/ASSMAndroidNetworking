@@ -4,11 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -43,6 +46,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.tvNameProduct.setText(product.getName());
         holder.tvPriceProduct.setText(String.valueOf(product.getPrice()));
         holder.tvDescriptionProduct.setText(product.getDescription());
+        Picasso.get().load(product.getImage()).into(holder.imImage);
         holder.btnSua.setOnClickListener(v ->{
             callback.Edit(product);
         });
@@ -64,12 +68,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         private TextView tvDescriptionProduct;
         private Button btnSua;
         private Button btnXoa;
+        private ImageView imImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             relyProduct = (RelativeLayout) itemView.findViewById(R.id.rely_product);
             tvNameProduct = (TextView) itemView.findViewById(R.id.tv_nameProduct);
             tvPriceProduct = (TextView) itemView.findViewById(R.id.tv_priceProduct);
+            imImage = (ImageView) itemView.findViewById(R.id.im_image);
             tvDescriptionProduct = (TextView) itemView.findViewById(R.id.tv_descriptionProduct);
             btnSua = (Button) itemView.findViewById(R.id.btn_sua);
             btnXoa = (Button) itemView.findViewById(R.id.btn_xoa);
