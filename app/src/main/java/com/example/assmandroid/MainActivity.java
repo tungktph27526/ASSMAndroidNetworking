@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,12 +42,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnHuy;
     private Button btnSua;
     private Button btnXoa;
+    private TextView listPr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         idRcv = (RecyclerView) findViewById(R.id.id_rcv);
+
+
+
+
         btnShowDialogAddProduct = (FloatingActionButton) findViewById(R.id.btn_showDialogAddProduct);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ShowProduct();
 
         btnShowDialogAddProduct.setOnClickListener(this);
+        listPr = (TextView) findViewById(R.id.tv_list);
 
 //        productAdapter = new ProductAdapter(new ArrayList<>(), this);
 //        idRcv.setAdapter(productAdapter);
@@ -88,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (list != null){
             productAdapter = new ProductAdapter(list, this);
             idRcv.setAdapter(productAdapter);
+            listPr.setText("so san pham: "+String.valueOf(list.size()));
 //            productAdapter.setProductList(productList);
 //            productAdapter.notifyDataSetChanged();
         }
@@ -206,14 +214,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnHuy = (Button) dialog.findViewById(R.id.btn_huy);
         btnThem.setOnClickListener(v ->{
             String name = edTen.getText().toString().trim();
-            int price = Integer.parseInt(edGia.getText().toString().trim());
+            String price = edGia.getText().toString().trim();
             String description = edMota.getText().toString().trim();
             String image = edAnh.getText().toString().trim();
-//            if (name.isEmpty() || String.valueOf(price).isEmpty() || description.isEmpty() || image.isEmpty()){
-//                Toast.makeText(this, "ko dc de trong", Toast.LENGTH_SHORT).show();
-//            }else {
-                AddProduct(name, price, description, image);
-            //}
+            if (name.isEmpty() || price.isEmpty() || description.isEmpty() || image.isEmpty()){
+                Toast.makeText(this, "ko dc de trong", Toast.LENGTH_SHORT).show();
+           }else {
+                AddProduct(name, Integer.parseInt(price), description, image);
+            }
             dialog.dismiss();
         });
         btnHuy.setOnClickListener(v ->{

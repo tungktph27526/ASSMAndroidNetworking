@@ -32,8 +32,8 @@ app.get('/list', async function (req, res) {
 // Định nghĩa API thêm sản phẩm
 app.post('/addProduct', async (req, res) => {
     try {
-      const { name, price, description} = req.body;
-      const product = new ProductModel({ name, price, description });
+      const { name, price, description, image} = req.body;
+      const product = new ProductModel({ name, price, description, image });
       await product.save();
       showList(res);
     } catch (err) {
@@ -46,10 +46,10 @@ app.post('/addProduct', async (req, res) => {
   app.put('/product/:id', async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, price, description } = req.body;
+      const { name, price, description, image } = req.body;
       const product = await ProductModel.findByIdAndUpdate(
         id,
-        { name, price, description },
+        { name, price, description, image },
         { new: true }
       );
       showList(res);
